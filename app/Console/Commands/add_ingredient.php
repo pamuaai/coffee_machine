@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facade\Facade;
 use Illuminate\Console\Command;
 use App\Ingredient;
 
@@ -40,15 +42,24 @@ class add_ingredient extends Command
     {
         // $this->info($this->argument('i_name')."-".$this->argument('i_amount'));
         //Should later only work in maintenance mode
-        if(Ingredient::where('name', '=', $this->argument('i_name'))->exists()){
-            $ingredient = Ingredient::where('name', '=', $this->argument('i_name'))->first();
-            $ingredient->amount = $this->argument('i_amount') + $ingredient->amount;
+        if($this->laravel->isDownForMaintenance()){
+
+            if(Ingredient::where('name', '=', $this->argument('i_name'))->exists()){
+                $ingredient = Ingredient::where('name', '=', $this->argument('i_name'))->first();
+                $ingredient->amount = $this->argument('i_amount') + $ingredient->amount;
+            }else{
+                $ingredient = new Ingredient;
+                $ingredient->name = $this->argument('i_name');
+                $ingredient->amount =  $this->argument('i_amount');
+            }
+            $ingredient->save();
+            $this->info("Added ".$this->argument('i_amount')." measures of ".$this->argument('i_name'));
+            
+            //TODO!: LOG EVERYTHING!
+            
+            //TODO: Ask for input in case of missing arguments
         }else{
-            $ingredient = new Ingredient;
-            $ingredient->name = $this->argument('i_name');
-            $ingredient->amount =  $this->argument('i_amount');
+            $this->info("This command is only available in maintenance mode");
         }
-        $ingredient->save();
-        $this->info("Added ".$this->argument('i_amount')." measures of ".$this->argument('i_name'));
     }
 }
