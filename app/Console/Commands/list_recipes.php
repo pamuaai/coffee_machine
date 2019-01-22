@@ -38,7 +38,7 @@ class list_recipes extends Command
      */
     public function handle()
     {
-        //
+        //Must also display ingredients and amounts
         $allrecipes = Recipe::all();
         foreach($allrecipes as $recipe){
             $this->info($recipe->name);
