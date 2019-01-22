@@ -18,7 +18,7 @@ class refill_all extends Command
      *
      * @var string
      */
-    protected $description = 'Refills all ingredient containers';
+    protected $description = 'Refills all ingredient containers to 1000 units';
 
     /**
      * Create a new command instance.

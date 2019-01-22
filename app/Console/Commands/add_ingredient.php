@@ -47,6 +47,10 @@ class add_ingredient extends Command
             if(Ingredient::where('name', '=', $this->argument('i_name'))->exists()){
                 $ingredient = Ingredient::where('name', '=', $this->argument('i_name'))->first();
                 $ingredient->amount = $this->argument('i_amount') + $ingredient->amount;
+                if($ingredient->amount > 1000){
+                    $ingredient->amount = 1000;
+                    $this->info("The ".$this->argument('i_name')." container is full (1000)");
+                }
             }else{
                 $ingredient = new Ingredient;
                 $ingredient->name = $this->argument('i_name');
