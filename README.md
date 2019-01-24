@@ -34,7 +34,7 @@ Törli a name argumentumban megadott receptet (ha nincs megadva, rákérdez).
 ### list:recipes
 ---
 
-Az adatbázisban található összes receptet kilistázza
+Az adatbázisban található összes receptet kilistázza.
 
 ### list:sales
 ---
@@ -69,10 +69,23 @@ A name-ben megadott alapanyagot (ha nincs megadva, rákérdez) feltölti a maxim
 ## A munkafolyamat:
 
 ### Vasárnap
+
 A feladatnak vasárnap kezdtem neki, sajnos ami kevés időt aznap rá tudtam fordítani az a fejlesztési környezet előkészítésével telt (szerver telepítése, PHP frissítése, composer, laravel, git telepítése).
 
 ### Hétfő
+
 A tényleges kódolást hétfő este kezdtem. Elsőként létrehoztam az adatbázist, és az első migrációt, ami az 'ingredients' táblát hozza létre. Ez tartalmazza az italokhoz használt hozzávalókat és mennyiségeiket.  
-Miután az első adatbázistábla készen állt, valahogy fel szerettem volna tölteni adatokkal, ezért létrehoztam az add:ingredient artisan parancsot. Ez Eloquent ORM segítségével updateli az adott hozzávaló sorát, vagy új sort ad hozzá a táblához ha még nem szerepelne benne.
+Miután az első adatbázistábla készen állt, valahogy fel szerettem volna tölteni adatokkal, ezért létrehoztam az add:ingredient artisan parancsot. Ez Eloquent ORM segítségével updateli az adott hozzávaló sorát, vagy új sort ad hozzá a táblához ha még nem szerepelne benne.  
 
+Körülbelül este 7-től 10-ig dolgoztam rajta.
 
+### Kedd
+
+Már magabiztosabban folytattam, a parancsok nagyrészét kedden implementáltam. Az első nagyobb kihívás volt a receptek tárolásának módja, tekintve hogy bármikor szükség lehet egy új hozzávalóra. Végül amellett döntöttem, hogy egy adatbázistáblában tárolom őket, hogy Eloquent segítségével könnyen kezelhetőek legyenek. A tábla tartalmazza az ital nevét, a szokásos id, created_at és updated_at oszlopokat, és utána határozatlan számú hozzávaló oszlopot, amelyek celláiban a szükséges mennyiség szerepel, így ha recept hozzáadásakor új fajta hozzávalót adna meg a user, annak egy új oszlop jön létre.  
+
+Ezután néhány egyszerűbb parancsot hoztam létre, list:recipes, refill:all, delete:recipe.
+Itt következik a kávégép fő funkciója: az italkészítés. A make:drink parancs egy italnevet vár argumentumként(ha nincs megadva, rákérdez. A list:recipes segítségével megtudhatjuk hogy mik az opciók). Először leellenőrzi hogy egyáltalán létezik-e a recept majd ha igen, megnézi hogy áll-e rendelkezésre elegendő alapanyag a gépben. Csak ezek után veszi ki a tárolókból az hozzávalókat, majd kiírja hogy milyen italt készített.  
+
+Azzal zártam a napot, hogy az add:ingredient parancsba beépítettem egy 1000 egységes limitet.
+
+Megint este 7 körül kezdtem a munkát és 11-ig dolgoztam rajta.
