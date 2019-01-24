@@ -3,7 +3,7 @@ Coffee Machine - Brightly tesztfeladat
 
 ## Első feladat
 
-A következő parancsok állnak rendelkezésre a kávégép használatához:
+A következő artisan parancsok állnak rendelkezésre a kávégép használatához:
 
     *add:ingredient {i_name} {i_amount}
     *add:recipe {name?}
@@ -15,6 +15,9 @@ A következő parancsok állnak rendelkezésre a kávégép használatához:
     *make:drink {name?}
     *refill:all
     *refill:ingredient {name?}
+
+Az alábbi formában futtathatóak egy Laravel projektben:
+`php artisan [parancs:neve] {argumentum1} {argumentum2}`
 
 ### add:ingredient {i_name} {i_amount}
 ---
