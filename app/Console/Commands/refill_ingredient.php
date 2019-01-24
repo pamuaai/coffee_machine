@@ -39,24 +39,27 @@ class refill_ingredient extends Command
     {
         //
         if($this->laravel->isDownForMaintenance()){
-
-            if(Ingredient::where('name', '=', $this->argument('i_name'))->exists()){
-                $ingredient = Ingredient::where('name', '=', $this->argument('i_name'))->first();
+            $name = $this->argument('name');
+            if(!$name){
+                $name = $this->ask("Which ingredient container would you like to refill?");
+            }
+            if(Ingredient::where('name', '=', $name)->exists()){
+                $ingredient = Ingredient::where('name', '=', $name)->first();
                 $added = 1000 - $ingredient->amount;
                 $ingredient->amount = 1000;
                 
                 
             }else{
                 $ingredient = new Ingredient;
-                $ingredient->name = $this->argument('i_name');
+                $ingredient->name = $name;
                 $ingredient->amount =  1000;
             }
-            $this->info("The ".$this->argument('i_name')." container is full (1000)");
+            $this->info("The ".$name." container is full (1000)");
             $ingredient->save();
-            $this->info("Added ".$added." measures of ".$this->argument('i_name'));
+            $this->info("Added ".$added." measures of ".$name);
             $log = new Log;
             $log->action = "refill";
-            $log->item = $this->argument('i_name');
+            $log->item = $name;
             $log->amount = $added;
             $log->save();
             
