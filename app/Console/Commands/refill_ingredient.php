@@ -2,27 +2,23 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facade\Facade;
 use Illuminate\Console\Command;
-use App\Ingredient;
-use App\Log;
 
-class add_ingredient extends Command
+class refill_ingredient extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'add:ingredient {i_name} {i_amount}';
+    protected $signature = 'refill:ingredient {name?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Check if ingredient is in DB, if so, add amount to value in DB if not, add new ingredient to db, with amount';
+    protected $description = 'Refills ingredient to 1000';
 
     /**
      * Create a new command instance.
@@ -41,28 +37,27 @@ class add_ingredient extends Command
      */
     public function handle()
     {
-        // $this->info($this->argument('i_name')."-".$this->argument('i_amount'));
-        //Should later only work in maintenance mode
+        //
         if($this->laravel->isDownForMaintenance()){
 
             if(Ingredient::where('name', '=', $this->argument('i_name'))->exists()){
                 $ingredient = Ingredient::where('name', '=', $this->argument('i_name'))->first();
-                $ingredient->amount = $this->argument('i_amount') + $ingredient->amount;
-                if($ingredient->amount > 1000){
-                    $ingredient->amount = 1000;
-                    $this->info("The ".$this->argument('i_name')." container is full (1000)");
-                }
+                $added = 1000 - $ingredient->amount;
+                $ingredient->amount = 1000;
+                
+                
             }else{
                 $ingredient = new Ingredient;
                 $ingredient->name = $this->argument('i_name');
-                $ingredient->amount =  $this->argument('i_amount');
+                $ingredient->amount =  1000;
             }
+            $this->info("The ".$this->argument('i_name')." container is full (1000)");
             $ingredient->save();
-            $this->info("Added ".$this->argument('i_amount')." measures of ".$this->argument('i_name'));
+            $this->info("Added ".$added." measures of ".$this->argument('i_name'));
             $log = new Log;
             $log->action = "refill";
             $log->item = $this->argument('i_name');
-            $log->amount = $this->argument('i_amount');
+            $log->amount = $added;
             $log->save();
             
             //TODO: Ask for input in case of missing arguments

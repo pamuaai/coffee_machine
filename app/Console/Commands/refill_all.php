@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Ingredient;
+use App\Log;
 class refill_all extends Command
 {
     /**
@@ -45,6 +46,13 @@ class refill_all extends Command
                 $ingredient->amount = 1000;
                 $ingredient->save();
             }
+            $this->info("All ingredients have been filled to their maximum capacity (1000)");
+           
+            $log = new Log;
+            $log->action = "refill";
+            $log->item = "all";
+            $log->amount = 1000;
+            $log->save();
         }else{
             $this->info("This command is only available in maintenance mode");
         }
